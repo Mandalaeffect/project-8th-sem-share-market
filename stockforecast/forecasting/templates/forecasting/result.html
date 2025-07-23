@@ -1,0 +1,158 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>Forecast Result - Dark Theme</title>
+<style>
+    body {
+        background-color: #121212;
+        color: #e0e0e0;
+        padding: 40px 20px;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    h2, h4 {
+        text-align: center;
+        font-weight: 700;
+        margin-bottom: 20px;
+    }
+    .result-table {
+        background-color: #1e1e1e;
+        padding: 15px;
+        border-radius: 8px;
+        overflow-x: auto;
+        margin-bottom: 30px;
+    }
+    table.table {
+        color: #e0e0e0;
+        width: 100%;
+    }
+    table.table thead th {
+        border-bottom: 2px solid #3a3a3a;
+    }
+    table.table tbody tr:nth-child(odd) {
+        background-color: #2a2a2a;
+    }
+    ul.metrics-list {
+        list-style: none;
+        padding-left: 0;
+        max-width: 500px;
+        margin: 0 auto 30px auto;
+    }
+    ul.metrics-list li {
+        background: #2a2a2a;
+        margin-bottom: 10px;
+        padding: 10px 15px;
+        border-radius: 8px;
+        font-weight: 600;
+        color: #ddd;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.6);
+    }
+    .plot-container {
+        text-align: center;
+        margin-bottom: 30px;
+    }
+    .plot-container img {
+        max-width: 100%;
+        height: auto;
+        border-radius: 12px;
+        box-shadow: 0 4px 15px rgba(255, 255, 255, 0.15);
+    }
+    .btn-download, .btn-upload-again {
+        display: inline-block;
+        padding: 12px 28px;
+        margin: 5px 10px;
+        border-radius: 8px;
+        font-weight: 700;
+        border: none;
+        cursor: pointer;
+        text-decoration: none;
+        transition: background-color 0.3s ease;
+    }
+    .btn-download {
+        background-color: #0d6efd;
+        color: white;
+    }
+    .btn-download:hover {
+        background-color: #0845c3;
+    }
+    .btn-upload-again {
+        background-color: #6c757d;
+        color: #e0e0e0;
+    }
+    .btn-upload-again:hover {
+        background-color: #545b62;
+        color: white;
+    }
+    .verification {
+        text-align: center;
+        margin-bottom: 30px;
+        font-size: 1.2em;
+        font-weight: bold;
+    }
+    .verification span {
+        display: inline-block;
+        margin-top: 10px;
+        padding: 10px 20px;
+        border-radius: 8px;
+    }
+    .accurate {
+        background-color: #198754;
+        color: #fff;
+    }
+    .not-accurate {
+        background-color: #dc3545;
+        color: #fff;
+    }
+</style>
+</head>
+<body>
+
+<h2>Forecast Result</h2>
+
+<div class="result-table">
+    {{ result_table|safe }}
+</div>
+
+<h4>Metrics</h4>
+<ul class="metrics-list">
+    {% for key, metric in metrics.items %}
+        <li><strong>{{ key }}</strong><br>
+            RMSE: {{ metric.RMSE|floatformat:2 }},
+            MAE: {{ metric.MAE|floatformat:2 }},
+            MAPE: {{ metric.MAPE|floatformat:2 }}%,
+            Accuracy (±5%): {{ metric.Accuracy_5pct|floatformat:2 }}%
+        </li>
+    {% endfor %}
+</ul>
+
+{% if verification %}
+<div class="verification">
+    <h4>Next Day Verification</h4>
+    <div>
+        Predicted: {{ verification.Predicted|floatformat:2 }} |
+        Actual: {{ verification.Actual|floatformat:2 }} |
+        Error: {{ verification.Error|floatformat:2 }}%
+    </div>
+    <div>
+        {% if verification.Result == '✅ Accurate' %}
+            <span class="accurate">{{ verification.Result }}</span>
+        {% else %}
+            <span class="not-accurate">{{ verification.Result }}</span>
+        {% endif %}
+    </div>
+</div>
+{% endif %}
+
+<div class="plot-container">
+    <h4>Forecast Plot</h4>
+    <img src="{{ plot_url }}" alt="Forecast plot" />
+</div>
+
+<div class="text-center">
+    <a href="{% url 'download_result' %}" class="btn-download">Download Results as CSV</a>
+    <a href="{% url 'upload_file' %}" class="btn-upload-again">Upload Another File</a>
+</div>
+
+</body>
+</html>

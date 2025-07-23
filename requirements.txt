@@ -1,0 +1,8 @@
+django
+pandas
+matplotlib
+tensorflow
+scikit-learn
+prophet
+tabulate
+openpyxl

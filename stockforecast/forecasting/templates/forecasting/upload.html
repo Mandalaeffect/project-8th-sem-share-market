@@ -1,0 +1,106 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>NEPSE Prediction Model</title>
+    
+    <style>
+        body, html {
+            height: 100%;
+            background-color: #121212;
+            color: #fff;
+            margin: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        .container {
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .upload-box {
+            background: #000;
+            padding: 30px 40px;
+            border-radius: 12px;
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.15);
+            width: 100%;
+            max-width: 450px;
+            text-align: center;
+            border: 1px solid #444;
+        }
+        h2 {
+            margin-bottom: 30px;
+            font-weight: 700;
+            color: #fff;
+            text-transform: uppercase;
+            letter-spacing: 1.2px;
+        }
+        button.btn-primary {
+            width: 100%;
+            font-weight: 600;
+            padding: 12px 0;
+            font-size: 1.1rem;
+            background-color: #fff;
+            color: #000;
+            border: none;
+            transition: background-color 0.3s ease, color 0.3s ease;
+            cursor: pointer;
+            border-radius: 8px;
+        }
+        button.btn-primary:hover {
+            background-color: #444;
+            color: #fff;
+        }
+        ul {
+            margin-top: 20px;
+            list-style: none;
+            padding-left: 0;
+        }
+        ul li {
+            color: #e74c3c;
+            font-weight: 600;
+        }
+        label {
+            color: #ddd;
+            font-weight: 600;
+        }
+        input, select, textarea {
+            background-color: #222;
+            color: #eee;
+            border: 1px solid #444;
+            border-radius: 6px;
+            padding: 8px 10px;
+            width: 100%;
+            margin-bottom: 15px;
+            font-size: 1rem;
+        }
+        input::placeholder, textarea::placeholder {
+            color: #aaa;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="upload-box">
+        <h2>NEPSE Prediction Model</h2>
+
+        <form method="post" enctype="multipart/form-data" class="mt-3">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit" class="btn btn-primary">Upload & Forecast</button>
+        </form>
+
+        {% if messages %}
+          <ul>
+            {% for message in messages %}
+              <li>{{ message }}</li>
+            {% endfor %}
+          </ul>
+        {% endif %}
+    </div>
+</div>
+
+</body>
+</html>
